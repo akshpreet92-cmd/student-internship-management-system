@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Admin Dashboard</title>
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        body {
+            background-color: #080d20;
+        }
+
+        .admin-heading {
+            text-align: center;
+            padding: 35px 15px;
+        }
+
+        .admin-container {
+            padding: 25px;
+            max-width: 1200px;
+            margin: auto;
+            overflow-x: auto;
+        }
+
+        .admin-container table {
+            min-width: 750px;
+        }
+
+        .approve {
+            background: #16a34a;
+        }
+
+        .reject {
+            background: #e11d48;
+        }
+
+        .logout {
+            background: #dc2626;
+        }
+    </style>
+
+    <script>
+        // Protect the dashboard before displaying it
+        if (sessionStorage.getItem("adminLoggedIn") !== "true") {
+            window.location.replace("admin-login.html");
+        } else {
+            document.documentElement.style.visibility = "visible";
+        }
+    </script>
+</head>
+
+<body style="visibility:hidden;">
+
+<header>
+    <h2>Internship Portal | Admin</h2>
+    <button class="logout" onclick="logoutAdmin()">Logout</button>
+</header>
+
+<div class="admin-heading">
+    <h1>Admin Dashboard</h1>
+    <p>Manage student internship applications</p>
+</div>
+
+<div class="admin-container">
+
+    <h2>All Student Applications</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Email</th>
+                <th>Internship</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="applicationTable"></tbody>
+    </table>
+
+</div>
+
+<script>
+
+function showApplications() {
+
+    let applications =
+        JSON.parse(localStorage.getItem("applications")) || [];
+
+    let table = document.getElementById("applicationTable");
+
+    table.innerHTML = "";
+
+    if (applications.length === 0) {
+        table.innerHTML =
+            "<tr><td colspan='5'>No applications found.</td></tr>";
+        return;
+    }
+
+    applications.forEach(function(app, index) {
+
+        let row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="status"></td>
+            <td>
+                <button class="approve">Approve</button>
+                <button class="reject">Reject</button>
+            </td>
+        `;
+
+        row.children[0].textContent = app.name;
+        row.children[1].textContent = app.email;
+        row.children[2].textContent = app.internship;
+        row.children[3].textContent = app.status;
+
+        row.querySelector(".approve").onclick = function() {
+            updateStatus(index, "Approved");
+        };
+
+        row.querySelector(".reject").onclick = function() {
+            updateStatus(index, "Rejected");
+        };
+
+        table.appendChild(row);
+    });
+}
+
+function updateStatus(index, status) {
+
+    let applications =
+        JSON.parse(localStorage.getItem("applications")) || [];
+
+    applications[index].status = status;
+
+    localStorage.setItem(
+        "applications",
+        JSON.stringify(applications)
+    );
+
+    showApplications();
+
+    alert("Application " + status + " successfully!");
+}
+
+function logoutAdmin() {
+
+    sessionStorage.removeItem("adminLoggedIn");
+
+    window.location.replace("admin-login.html");
+}
+
+showApplications();
+
+</script>
+
+</body>
+</html>

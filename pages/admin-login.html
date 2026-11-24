@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .login-container {
+            max-width: 450px;
+            margin: 70px auto;
+            padding: 30px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            margin-bottom: 15px;
+        }
+
+        .login-container p {
+            color: #cbd5e1;
+        }
+
+        .login-container form {
+            margin: 20px 0 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Internship Portal</h2>
+    <a href="../1project.html">Home</a>
+</header>
+
+<div class="login-container">
+    <h1>Admin Login</h1>
+    <p>Authorized administrators only</p>
+
+    <form id="adminLoginForm">
+        <input
+            type="email"
+            id="adminEmail"
+            placeholder="Admin Email"
+            required
+        >
+
+        <input
+            type="password"
+            id="adminPassword"
+            placeholder="Admin Password"
+            required
+        >
+
+        <button type="submit">Login as Admin</button>
+    </form>
+</div>
+
+<script>
+document.getElementById("adminLoginForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let email = document.getElementById("adminEmail").value;
+    let password = document.getElementById("adminPassword").value;
+
+    // DEMO LOGIN CREDENTIALS
+    let correctEmail = "admin@internship.com";
+    let correctPassword = "Admin@123";
+
+    if (email === correctEmail && password === correctPassword) {
+
+        sessionStorage.setItem("adminLoggedIn", "true");
+
+        alert("Admin Login Successful!");
+
+        window.location.href = "admin.html";
+
+    } else {
+        alert("Invalid Admin Email or Password!");
+    }
+});
+</script>
+
+</body>
+</html>
